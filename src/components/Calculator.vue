@@ -49,7 +49,24 @@
                         </form>
 
                         <div class="mt-3">
-                            <p><span>Valor de 13º salário:</span> </p>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Valor de 13º salário</th>
+                                        <th scope="col">Valor de férias + 1/3</th>
+                                        <th scope="col">Multa sobre FGTS e contribuição social sobre o aviso prévio indenizado e sobre o aviso prévio trabalhado</th>
+                                        <th scope="col">Encargos previdenciários e FGTS, INSS, SESI ou SESC, SENAI ou SENAC, INCRA, Salário Educação, FGTS,, SEBRAE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{tot13}}</td>
+                                        <td>{{totVacation}}</td>
+                                        <td>{{totMultaFgts}}</td>
+                                        <td>@mdo</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -77,9 +94,11 @@ export default {
             totGains: 0,
             tot13: 0,
             totVacation: 0,
+            totMultaFgts: 0
         }
     }, methods: {
         sumGains: function () {
+            this.totGains = 0
             let tot = 0
             for (let key in this.gain) {
                 tot += parseInt(this.gain[key]);
@@ -89,6 +108,7 @@ export default {
         },
 
         calc13: function () {
+            this.tot13 = 0
             let value13 = this.sumGains()/12
             this.tot13 = value13
 
@@ -96,15 +116,24 @@ export default {
         },
 
         calcVacation: function () {
+            this.totVacation = 0 
             let vacs = this.sumGains()/12
             vacs = vacs+vacs/3
             this.totVacation = vacs
             return vacs
         },
 
+        calcMultaFgts: function () {
+            this.totMultaFgts = 0
+            let calcMulta = this.sumGains() * 0.5
+            this.totMultaFgts = calcMulta
+            return calcMulta
+        },
+
         doCalcs: function () {
-            console.log(this.calc13())
-            console.log(this.calcVacation())
+            this.calc13()
+            this.calcVacation()
+            this.calcMultaFgts()
             this.gain = Object.values(this.gain).flat()
         }
     }
