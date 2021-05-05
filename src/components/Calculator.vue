@@ -63,24 +63,23 @@
                   <td>{{'R$ ' + tot13.toFixed(2)}}</td>
                   <td>{{'R$ ' + totVacation.toFixed(2)}}</td>
                   <td>{{'R$ ' + totMultaFgts.toFixed(2)}}</td>
-                  <td>{{this.sumGains() * setGtsCalcPercent}} <br>
+                  <td>{{'R$ ' + totEncargos}} <br>
                     <div class="m-1">
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="inlineRadio1"  value="0.01" v-model="fgtsCalcPercent">
+                        <input class="form-check-input" type="radio" id="inlineRadio1"  value="0.01" v-model="encargosPercent">
                         <label class="form-check-label" for="inlineRadio1">1%</label>
                       </div>
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="inlineRadio2"  value="0.02" v-model="fgtsCalcPercent">
+                        <input class="form-check-input" type="radio" id="inlineRadio2"  value="0.02" v-model="encargosPercent">
                         <label class="form-check-label" for="inlineRadio2">2%</label>
                       </div>
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="inlineRadio3"  value="0.03" v-model="fgtsCalcPercent">
+                        <input class="form-check-input" type="radio" id="inlineRadio3"  value="0.03" v-model="encargosPercent">
                         <label class="form-check-label" for="inlineRadio3">3%</label>
                       </div>
                     </div>
                   </td>
                 </tr>
-
                 </tbody>
               </table>
             </div>
@@ -90,9 +89,7 @@
     </div>
   </div>
 </template>
-<style>
 
-</style>
 <script>
 export default {
   data: function () {
@@ -112,15 +109,18 @@ export default {
       tot13: 0,
       totVacation: 0,
       totMultaFgts: 0,
-      fgtsCalcPercent: 0.01
+      totEncargos: 0,
+      encargosPercent: 0.01
+
     }
   },
-  computed: {
-    setGtsCalcPercent() {
-        return parseInt(this.fgtsCalcPercent)
+  watch: {
+    encargosPercent(newPercent, oldPercent) {
+      let percent = parseFloat(this.encargosPercent)
+      this.totEncargos = this.totGains*percent
     }
   }
-,
+  ,
   methods: {
     sumGains: function () {
       this.totGains = 0
@@ -134,7 +134,7 @@ export default {
 
     calc13: function () {
       this.tot13 = 0
-      let value13 = this.sumGains()/12
+      let value13 = this.totGains/12
       this.tot13 = value13
 
       return value13
@@ -142,7 +142,7 @@ export default {
 
     calcVacation: function () {
       this.totVacation = 0
-      let vacs = this.sumGains()/12
+      let vacs = this.totGains/12
       vacs = vacs+vacs/3
       this.totVacation = vacs
       return vacs
@@ -150,14 +150,19 @@ export default {
 
     calcMultaFgts: function () {
       this.totMultaFgts = 0
-      let calcMulta = this.sumGains() * 0.5
+      let calcMulta = this.totGains * 0.5
       this.totMultaFgts = calcMulta
       return calcMulta
     },
+    calcEncargos: function () {
+      this.totEncargos = this.totGains*0.01
+    },
     doCalcs: function () {
+      this.sumGains()
       this.calc13()
       this.calcVacation()
       this.calcMultaFgts()
+      this.calcEncargos()
       this.calculed = true
       this.gain = Object.values(0).flat()
     }
