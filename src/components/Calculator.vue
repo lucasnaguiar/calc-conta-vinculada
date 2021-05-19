@@ -2,6 +2,18 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
+                <div>
+                    <div v-if="errors.length">
+                        <b>Por favor, corrija o(s) seguinte(s) erro(s):</b>
+                                                    <div class="alert alert-danger" role="alert">
+                        <ul style="list-style:none">
+
+                            <li v-for="error in errors" :key="error">{{ error }}</li>
+                        </ul>
+                                                    </div>
+
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-header">Calculadora - Conta Vinculada (Beta)</div>
                     <div class="card-body">
@@ -9,42 +21,42 @@
                             <div class="row g-3">
                                 <div class="col-md-3">
                                     <label for="base-salary" class="form-label">Salário-base</label>
-                                    <input type="text" class="form-control" id="base-salary" v-model="gain.base_salary">
+                                    <input type="number" class="form-control" id="base-salary" v-model="gain.base_salary">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="overtime" class="form-label">Horas extras</label>
-                                    <input type="text" class="form-control" id="overtime" v-model="gain.overtime">
+                                    <input type="number" class="form-control" id="overtime" v-model="gain.overtime">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="nocturnal-added" class="form-label">Adicional noturno</label>
-                                    <input type="text" class="form-control" id="nocturnal-added" v-model="gain.nocturnal_added">
+                                    <input type="number" class="form-control" id="nocturnal-added" v-model="gain.nocturnal_added">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="insalubrity" class="form-label">Adicional de insalubridade</label>
-                                    <input type="text" class="form-control" id="insalubrity" v-model="gain.insalubrity">
+                                    <input type="number" class="form-control" id="insalubrity" v-model="gain.insalubrity">
                                 </div>
                             </div>
                             <div class="row g-3 mt-2">
                                 <div class="col-md-3">
                                     <label for="tips" class="form-label">Gorjetas</label>
-                                    <input type="text" class="form-control" id="tips" v-model="gain.tips">
+                                    <input type="number" class="form-control" id="tips" v-model="gain.tips">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="dangerousness-added" class="form-label">Adicional de periculosidade</label>
-                                    <input type="text" class="form-control" id="dangerousness-added" v-model="gain.dangerousness_added">
+                                    <input type="number" class="form-control" id="dangerousness-added" v-model="gain.dangerousness_added">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="commission" class="form-label">Comissão</label>
-                                    <input type="text" class="form-control" id="commission" v-model="gain.commission">
+                                    <input type="number" class="form-control" id="commission" v-model="gain.commission">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="gratifications" class="form-label">Gratificações</label>
-                                    <input type="text" class="form-control" id="gratifications" v-model="gain.gratifications">
+                                    <input type="number" class="form-control" id="gratifications" v-model="gain.gratifications">
                                 </div>
                             </div>
 
                             <div class="col-12 mt-3">
-                                <a class="btn btn-primary" v-on:click="doCalcs">Calcular</a>
+                                <a class="btn btn-primary" v-on:click="checkForm()">Calcular</a>
                             </div>
                         </form>
 
@@ -163,10 +175,6 @@ export default {
         calcEncargos: function () {
             this.totEncargos = this.totGains*this.encargosPercent
         },
-        
-        checkForm: function() {
-            
-        },
 
         reloadApp: function() {
             Location.reload()
@@ -180,7 +188,22 @@ export default {
             this.calcEncargos()
             this.calculed = true
             this.gain = Object.values(0).flat()
-        }
+        },
+
+        checkForm: function (e) {
+            this.errors = []
+
+            if(!this.gain.base_salary) {
+                this.errors.push('Preencher o salário base é obrigatório');
+            }
+
+            if(this.errors.length === 0) {
+
+                this.doCalcs()
+            }
+
+            e.preventDefault();
+        },
     }
 }
 </script>
