@@ -4,13 +4,14 @@
             <div class="col-md-12">
                 <div>
                     <div v-if="errors.length">
-                        <b>Por favor, corrija o(s) seguinte(s) erro(s):</b>
-                                                    <div class="alert alert-danger" role="alert">
-                        <ul style="list-style:none">
+                        <div class="alert alert-danger" role="alert">
+                            <b>Por favor, corrija o(s) seguinte(s) erro(s):</b>
 
-                            <li v-for="error in errors" :key="error">{{ error }}</li>
-                        </ul>
-                                                    </div>
+                            <ul style="list-style:none">
+
+                                <li v-for="error in errors" :key="error">{{ error }}</li>
+                            </ul>
+                        </div>
 
                     </div>
                 </div>
@@ -21,37 +22,37 @@
                             <div class="row g-3">
                                 <div class="col-md-3">
                                     <label for="base-salary" class="form-label">Salário-base</label>
-                                    <input type="number" class="form-control" id="base-salary" v-model="gain.base_salary">
+                                    <input type="number" min="0" class="form-control" id="base-salary" v-model="gain.base_salary">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="overtime" class="form-label">Horas extras</label>
-                                    <input type="number" class="form-control" id="overtime" v-model="gain.overtime">
+                                    <input type="number" min="0" class="form-control" id="overtime" v-model="gain.overtime">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="nocturnal-added" class="form-label">Adicional noturno</label>
-                                    <input type="number" class="form-control" id="nocturnal-added" v-model="gain.nocturnal_added">
+                                    <input type="number" min="0" class="form-control" id="nocturnal-added" v-model="gain.nocturnal_added">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="insalubrity" class="form-label">Adicional de insalubridade</label>
-                                    <input type="number" class="form-control" id="insalubrity" v-model="gain.insalubrity">
+                                    <input type="number" min="0" class="form-control" id="insalubrity" v-model="gain.insalubrity">
                                 </div>
                             </div>
                             <div class="row g-3 mt-2">
                                 <div class="col-md-3">
                                     <label for="tips" class="form-label">Gorjetas</label>
-                                    <input type="number" class="form-control" id="tips" v-model="gain.tips">
+                                    <input type="number" min="0" class="form-control" id="tips" v-model="gain.tips">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="dangerousness-added" class="form-label">Adicional de periculosidade</label>
-                                    <input type="number" class="form-control" id="dangerousness-added" v-model="gain.dangerousness_added">
+                                    <input type="number" min="0" class="form-control" id="dangerousness-added" v-model="gain.dangerousness_added">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="commission" class="form-label">Comissão</label>
-                                    <input type="number" class="form-control" id="commission" v-model="gain.commission">
+                                    <input type="number" min="0" class="form-control" id="commission" v-model="gain.commission">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="gratifications" class="form-label">Gratificações</label>
-                                    <input type="number" class="form-control" id="gratifications" v-model="gain.gratifications">
+                                    <input type="number" min="0" class="form-control" id="gratifications" v-model="gain.gratifications">
                                 </div>
                             </div>
 
@@ -66,7 +67,7 @@
                                 <tr>
                                     <th scope="col">Valor de 13º salário</th>
                                     <th scope="col">Valor de férias + 1/3</th>
-                                    <th scope="col">Multa sobre FGTS e aviso prévio indenizado ou trabalhado</th>
+                                    <th scope="col">Multa sobre FGTS para as rescisões sem justa causa</th>
                                     <th scope="col">Encargos previdenciários e FGTS, INSS, SESI ou SESC, SENAI ou SENAC, INCRA, Salário Educação, FGTS, SEBRAE</th>
                                 </tr>
                                 </thead>
@@ -96,7 +97,6 @@
                             </table>
 
                             <h3>Total: {{ 'R$ ' + (tot13 + totVacation + totMultaFgts +   totEncargos).toFixed(2) }}</h3>
-                            <button type="button" class="btn btn-link" v-on:click="reloadApp()">Novo Calculo</button>
 
                         </div>
                     </div>
@@ -194,7 +194,7 @@ export default {
             this.errors = []
 
             if(!this.gain.base_salary) {
-                this.errors.push('Preencher o salário base é obrigatório');
+                this.errors.push('Preencher o salário-base é obrigatório (maior que 0).');
             }
 
             if(this.errors.length === 0) {
